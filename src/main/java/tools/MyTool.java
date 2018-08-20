@@ -52,4 +52,69 @@ public class MyTool {
             return -1;
         }
     }
+
+    /**
+     * 打印 数组 int[]
+     *
+     * @param foo 被打印的数组
+     */
+    public static void log(@NotNull int[] foo) {
+        String bar = "[";
+        for (int i = 0; i < foo.length; i++) {
+            if (i == 0) {
+                bar += foo[i];
+            } else {
+                bar += ", " + foo[i];
+            }
+        }
+        bar += "]";
+        System.out.println(bar);
+    }
+
+    /**
+     * 打印 字符串 String
+     *
+     * @param foo 被打印的字符串
+     */
+    public static void log(String foo) {
+        System.out.println(foo);
+    }
+
+    /**
+     * 打印 数字 int
+     *
+     * @param foo 被打印的数字
+     */
+    public static void log(int foo) {
+        System.out.println(foo);
+    }
+
+    /**
+     * 数组拷贝
+     *
+     * @param foo 数组
+     * @return 和原数组每个元素的值都相同的一个新数组
+     */
+    public static int[] copyIntList(int[] foo) {
+        int[] bar = {};
+        for (int i = 0; i < foo.length; i++) {
+            bar[i] = foo[i];
+        }
+        return bar;
+    }
+
+    /**
+     * 创建一个带默认值的int数组
+     *
+     * @param arrayLength  创建数组的长度
+     * @param defaultValue 默认值
+     * @return 返回符合要求的数组
+     */
+    public static int[] createIntArray(int arrayLength, int defaultValue) {
+        int[] result = new int[arrayLength];
+        for (int i = 0; i < arrayLength; i++) {
+            result[i] = defaultValue;
+        }
+        return result;
+    }
 }
