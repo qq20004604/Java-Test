@@ -13,7 +13,7 @@ public class MyTool {
      * @throws Exception
      */
 
-    public static int StringToInt(String str) throws Exception {
+    public static int StringToInt(String str) {
         StringBuffer buf = new StringBuffer();
         char[] ch = str.toCharArray();
         for (int i = 0; i < ch.length; i++) {

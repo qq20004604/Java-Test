@@ -31,13 +31,54 @@ public class DotManager {
 
     }
 
-    public void start() {
+    /**
+     * 设置空间和飞船的谁来
+     *
+     * @param containerLength 空间范围
+     * @param countOfBoats 飞船数量
+     */
+    public void setContainerAndBoats(int containerLength, int countOfBoats) {
+
+    }
+
+    /**
+     * 开始游戏
+     */
+    public void playGame() {
         while (true) {
             // 获得用户输入
             String userInput = getPrintIn();
 
             // 验证用户输入是否合法
             Boolean isCorrect = isUserInputCorrect(userInput);
+
+            // 不合法则继续输入
+            if (!isCorrect) {
+                continue;
+            }
+
+            // 命中目标
+            int hit = MyTool.StringToInt(userInput);
+
+            try {
+                //　干掉那个船！抛错说明出问题了
+                tryKillBoat(hit);
+            } catch (Exception e) {
+                continue;
+            }
+
+            // 此次命中信息
+            String msg = reportAction(hit);
+
+            // 判定游戏是否结束
+            if (isGameover()) {
+                MyTool.log("本次命中的坐标是：" + hit + "，" + msg + "，所有飞船都被摧毁，游戏结束！");
+            } else {
+                MyTool.log("本次命中的坐标是：" + hit + "，" + msg + "，本轮结束，游戏继续");
+            }
+
+            // 通报当前游戏状态
+            notifyState();
         }
     }
 
@@ -95,7 +136,7 @@ public class DotManager {
      * 当前位置是否正确
      *
      * @param pos 此次命中位置
-     * @return true 正确的命中
+     * @return true 正确的命中（未探索的空间 或者 未发现的飞船）
      */
     private boolean isCorrectPosition(int pos) {
         if (pos < 0 || pos > container.length) {
@@ -107,6 +148,12 @@ public class DotManager {
         return true;
     }
 
+    /**
+     * 根据当前攻击目标返回信息
+     *
+     * @param pos
+     * @return
+     */
     private String reportAction(int pos) {
         if (pos < 0 || pos > container.length) {
             return "超出范围";
@@ -121,17 +168,55 @@ public class DotManager {
         }
     }
 
+
     /**
-     * 重置游戏，创造游戏空间
+     * 完成一次攻击动作
      *
-     * @param boats 船的数量
-     * @param space 空间数量
+     * @param pos 理论上，这个只会是 未探索的空间 或者 未发现的飞船
      */
-    public boolean resetGame(int boats, int space) {
-        // 如果船大于空间数量
-        if (boats >= space) {
+    private void tryKillBoat(int pos) throws Exception {
+        if (container[pos] == BoatNotFind) {
+            container[pos] = BoatFind;
+        } else if (container[pos] == EmptyNotFind) {
+            container[pos] = EmptyFind;
+        } else {
+            throw new Exception("错误的输入内容109");
+        }
+    }
+
+    /**
+     * 游戏是否结束
+     *
+     * @return true 结束
+     */
+    private boolean isGameover() {
+        // 检查还有没有未命中船的索引
+        int notFindBoatIndex = Arrays.binarySearch(container, BoatNotFind);
+
+        // < 0 说明无，游戏结束
+        if (notFindBoatIndex < 0) {
+            return true;
+        } else {
             return false;
         }
-        return true;
+    }
+
+    private void notifyState() {
+        String log = "";
+        for (int i = 0; i < container.length; i++) {
+            log += "【";
+            if (container[i] == EmptyNotFind || container[i] == BoatNotFind) {
+                log += i;
+            } else if (container[i] == EmptyFind) {
+                log += "空";
+            } else if (container[i] == BoatFind) {
+                log += "损毁的飞船";
+            }
+            log += "】 ";
+        }
+        MyTool.log("————————————————————");
+        MyTool.log("雷达扫描结果如下");
+        MyTool.log(log);
+        MyTool.log("————————————————————");
     }
 }
