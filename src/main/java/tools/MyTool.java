@@ -35,6 +35,36 @@ public class MyTool {
     }
 
     /**
+     * 字符串转数字，只允许0-9和位于第一位的负号，否则抛错
+     *
+     * @param str 被转换的字符串
+     * @return 转换后的结果
+     * @throws Exception
+     */
+    public static int StringToIntOnlyNumber(String str) throws Exception {
+        StringBuffer buf = new StringBuffer();
+        char[] ch = str.toCharArray();
+        for (int i = 0; i < ch.length; i++) {
+            if (ch[i] >= '0' && ch[i] <= '9') {
+                buf.append(ch[i]);
+            } else if (buf.length() == 0 && ch[i] == '-') {
+                // 这个是考虑到负号
+                // 遇见负号时，只有 buf 为空（即让负号处于第一位）的时候，才会添加进去
+                buf.append(ch[i]);
+            } else {
+                throw new Exception("must only have Number or Sign\"-\"");
+            }
+        }
+        // 范围在 -2147483648 ~ 2147483647
+        // < 10位肯定正常，> 12 位肯定抛错
+        String string = buf.toString();
+        // 如果过大或小，都会抛出异常
+        int result = Integer.parseInt(string);
+        return result;
+    }
+
+
+    /**
      * 比较字符串和数字的大小
      *
      * @param str 需要是纯数字（允许第一位有负号）字符串，否则报错

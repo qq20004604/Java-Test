@@ -34,12 +34,40 @@ public class DotManager {
     /**
      * 设置空间和飞船的谁来
      *
-     * @param containerLength 空间范围
-     * @param countOfBoats 飞船数量
      */
-    public void setContainerAndBoats(int containerLength, int countOfBoats) {
+    public void setContainerAndBoats() {
+        // 获取用户输入的空间和船
+        getContainerAndBoats();
 
+        // 创建船和宇宙空间
+        createContainer();
+        createBoats();
+
+        // 通报状态
+        notifyState();
+        gameIsDoing = true;
     }
+
+
+    /**
+     * 获取空间和飞船
+     */
+    private void getContainerAndBoats() {
+        int space, boats;
+        while (true) {
+            space = getIntInput("请输入空间大小：");
+            boats = getIntInput("请输入飞船数量：");
+
+            if (space < boats) {
+                MyTool.log("飞船数量应该大于宇宙空间");
+            } else {
+                break;
+            }
+        }
+        NumberOfSpace = space;
+        NumberOfBoats = boats;
+    }
+
 
     /**
      * 开始游戏
@@ -82,6 +110,53 @@ public class DotManager {
         }
     }
 
+    /**
+     * 创建宇宙空间
+     */
+    private void createContainer() {
+        container = MyTool.createIntArray(NumberOfSpace, EmptyNotFind);
+    }
+
+    /**
+     * 创建飞船
+     */
+    private void createBoats() {
+        // 随机生成第一个船的坐标
+        int firstBoat = (int) (Math.random() * (NumberOfSpace - NumberOfBoats));
+
+        for (int i = firstBoat; i < firstBoat + NumberOfBoats; i++) {
+            container[i] = BoatNotFind;
+        }
+    }
+
+    /**
+     * 获取用户输入的值
+     *
+     * @param msg
+     * @return
+     */
+    private int getIntInput(String msg) {
+        PrintIn printAct = new PrintIn();
+
+        // 设置提示文字
+        printAct.setTips(msg);
+
+        int number;
+
+        // 要求输入 int 类型的值
+        printAct.printInInt();
+
+        // 报错则继续输入
+        while (printAct.isInputError()) {
+            MyTool.log("输入错误，请重新输入");
+            // 要求输入 int 类型的值
+            printAct.printInInt();
+        }
+
+        number = Integer.parseInt(printAct.getUserInput());
+        return number;
+    }
+
 
     /**
      * 获取用户输入
@@ -95,12 +170,14 @@ public class DotManager {
         // 设置提示文字
         printAct.setTips("请输入你要击毁的飞船目标");
 
+        // 要求用户输入
+        printAct.printIn();
 
         while (printAct.isInputError()) {
             MyTool.log("输入错误，请重新输入");
 
             // 要求用户输入
-            printAct.setUserInput();
+            printAct.printIn();
         }
 
         String result = printAct.getUserInput();

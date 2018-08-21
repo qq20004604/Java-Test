@@ -3,10 +3,9 @@ package tools;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 
 public class PrintIn {
-    private String s;
+    private String str;
     private Boolean isError = false;
     // 输入提示文字：
     private String Tips = "请输入：";
@@ -20,20 +19,64 @@ public class PrintIn {
         Tips = tips;
     }
 
+    /**
+     * 普通输入，读入一行，正常的字符串
+     */
     public void printIn() {
         this.setUserInput();
     }
 
     /**
+     * 只允许输入0-9的字符串，第一位允许负号
+     */
+    public void printInInt() {
+        this.setUserInputOnlyInt();
+    }
+
+    /**
+     * 获取用户输入内容
+     *
+     * @return String 字符串
+     */
+    public String getUserInput() {
+        return str;
+    }
+
+    /**
      * 获取用户输入
      */
-    public void setUserInput() {
+    private void setUserInput() {
         isError = false;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print(Tips);
-            s = br.readLine();
+            str = br.readLine();
         } catch (IOException e) {
+            isError = true;
+            // 打印这行错误信息
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取用户输入，只允许输入0-9，第一位允许负号
+     */
+    private void setUserInputOnlyInt() {
+        isError = false;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            System.out.print(Tips);
+            String ss = br.readLine();
+
+            // 这个是考虑到负号
+            // 遇见负号时，只有 buf 为空（即让负号处于第一位）的时候，才会添加进去
+            int result = MyTool.StringToIntOnlyNumber(str);
+            str = String.valueOf(result);
+        } catch (IOException e) {
+            isError = true;
+            // 打印这行错误信息
+            e.printStackTrace();
+        } catch (Exception e) {
             isError = true;
             // 打印这行错误信息
             e.printStackTrace();
@@ -47,14 +90,5 @@ public class PrintIn {
      */
     public Boolean isInputError() {
         return isError;
-    }
-
-    /**
-     * 获取用户输入内容
-     *
-     * @return String 字符串
-     */
-    public String getUserInput() {
-        return s;
     }
 }
