@@ -66,20 +66,16 @@ public class PrintIn {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print(Tips);
-            String ss = br.readLine();
+            String s = br.readLine();
 
             // 这个是考虑到负号
             // 遇见负号时，只有 buf 为空（即让负号处于第一位）的时候，才会添加进去
-            int result = MyTool.StringToIntOnlyNumber(str);
+            int result = MyTool.StringToIntOnlyNumber(s);
             str = String.valueOf(result);
-        } catch (IOException e) {
-            isError = true;
-            // 打印这行错误信息
-            e.printStackTrace();
         } catch (Exception e) {
             isError = true;
             // 打印这行错误信息
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 

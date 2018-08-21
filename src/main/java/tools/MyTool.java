@@ -147,4 +147,22 @@ public class MyTool {
         }
         return result;
     }
+
+    /**
+     * 查找某个 int 变量在 int[] 的下标
+     *
+     * @param array 这是一个 int[]
+     * @param value 这个是被查询的变量
+     * @return -1 不在该 int数组中，其他值返回下标
+     */
+    public static int indexOf(int[] array, int value) {
+        int x = -1;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == value) {
+                x = i;
+                break;
+            }
+        }
+        return x;
+    }
 }

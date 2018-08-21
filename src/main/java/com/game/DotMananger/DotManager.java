@@ -33,7 +33,6 @@ public class DotManager {
 
     /**
      * 设置空间和飞船的谁来
-     *
      */
     public void setContainerAndBoats() {
         // 获取用户输入的空间和船
@@ -101,6 +100,7 @@ public class DotManager {
             // 判定游戏是否结束
             if (isGameover()) {
                 MyTool.log("本次命中的坐标是：" + hit + "，" + msg + "，所有飞船都被摧毁，游戏结束！");
+                break;
             } else {
                 MyTool.log("本次命中的坐标是：" + hit + "，" + msg + "，本轮结束，游戏继续");
             }
@@ -168,13 +168,13 @@ public class DotManager {
         PrintIn printAct = new PrintIn();
 
         // 设置提示文字
-        printAct.setTips("请输入你要击毁的飞船目标");
+        printAct.setTips("请输入你要击毁的飞船目标：");
 
         // 要求用户输入
         printAct.printIn();
 
         while (printAct.isInputError()) {
-            MyTool.log("输入错误，请重新输入");
+            MyTool.log("输入错误，请重新输入：");
 
             // 要求用户输入
             printAct.printIn();
@@ -216,7 +216,7 @@ public class DotManager {
      * @return true 正确的命中（未探索的空间 或者 未发现的飞船）
      */
     private boolean isCorrectPosition(int pos) {
-        if (pos < 0 || pos > container.length) {
+        if (pos < 0 || pos >= container.length) {
             return false;
         }
         if (container[pos] == EmptyFind || container[pos] == BoatFind) {
@@ -233,9 +233,11 @@ public class DotManager {
      */
     private String reportAction(int pos) {
         if (pos < 0 || pos > container.length) {
-            return "超出范围";
-        } else if (container[pos] == EmptyFind || container[pos] == BoatFind) {
-            return "该位置已探索";
+            return "该位置超出范围";
+        } else if (container[pos] == EmptyFind ) {
+            return "该位置为空";
+        } else if (container[pos] == BoatFind) {
+            return "该位置为飞船，已探索";
         } else if (container[pos] == EmptyNotFind) {
             return "未命中";
         } else if (container[pos] == BoatNotFind) {
@@ -267,8 +269,8 @@ public class DotManager {
      * @return true 结束
      */
     private boolean isGameover() {
-        // 检查还有没有未命中船的索引
-        int notFindBoatIndex = Arrays.binarySearch(container, BoatNotFind);
+        // 检查还有没有未命中船的下标
+        int notFindBoatIndex = MyTool.indexOf(container, BoatNotFind);
 
         // < 0 说明无，游戏结束
         if (notFindBoatIndex < 0) {
