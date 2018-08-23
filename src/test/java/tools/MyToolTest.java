@@ -6,6 +6,11 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.rules.ExpectedException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
@@ -17,7 +22,7 @@ import static org.junit.Assert.*;
  * @since 08/22/2018
  */
 public class MyToolTest {
-    // 先声明ExpectedException异常
+    // 先声明ExpectedException异常，测试异常抛出时使用
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -158,18 +163,42 @@ public class MyToolTest {
 
     /**
      * Method: log(@NotNull int[] foo)
+     * 测试打印数组
      */
     @Test
-    public void testLogFoo() throws Exception {
-        //TODO: Test goes here...
+    public void testLogFoo() {
+        // 声明输出类
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        // 把标准输出定向到一个 ByteArrayOutputStream 中
+        System.setOut(new PrintStream(output));
+
+        int[] foo = new int[3];
+        foo[0] = 1;
+        foo[1] = 100;
+        foo[2] = -1;
+        // 打印
+        MyTool.log(foo);
+
+        // 因为是 System.out.println ，所以最后有 \r\n 表示换行
+        assertThat(output.toString(), is("[1, 100, -1]\r\n"));
+        System.setOut(System.out);
     }
 
     /**
      * Method: copyIntList(int[] foo)
      */
     @Test
-    public void testCopyIntList() throws Exception {
-        //TODO: Test goes here...
+    public void testCopyIntList() {
+        int[] foo = new int[3];
+        foo[0] = 1;
+        foo[1] = 100;
+        foo[2] = -1;
+        int[] bar = MyTool.copyIntList(foo);
+        // 不是同一个引用，这两个效果应该一样
+        assertNotSame(foo, bar);    // 是不是同一个引用
+        assertNotEquals(foo, bar);  // 这个是把int[] 当做 Object 处理了
+        // 数组每个数值相同
+        assertArrayEquals(foo, bar);
     }
 
     /**
@@ -177,7 +206,14 @@ public class MyToolTest {
      */
     @Test
     public void testCreateIntArray() throws Exception {
-        //TODO: Test goes here...
+        int[] foo = new int[3];
+        foo[0] = 1;
+        foo[1] = 1;
+        foo[2] = 1;
+        int[] bar = MyTool.createIntArray(3, 1);
+
+        // 数组每个数值是否相同
+        assertArrayEquals(foo, bar);
     }
 
     /**
@@ -186,6 +222,17 @@ public class MyToolTest {
     @Test
     public void testIndexOf() throws Exception {
         //TODO: Test goes here...
+        int[] foo = new int[3];
+        foo[0] = 1;
+        foo[1] = -2;
+        foo[2] = 3514;
+        // 比较一下能不能正确获取到索引
+        assertEquals(0, MyTool.indexOf(foo, 1));
+        assertEquals(1, MyTool.indexOf(foo, -2));
+        assertEquals(2, MyTool.indexOf(foo, 3514));
+
+        // 比较一下当不在范围内返回是什么
+        assertEquals(-1, MyTool.indexOf(foo, 3));
     }
 
 } 

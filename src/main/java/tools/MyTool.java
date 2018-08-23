@@ -126,8 +126,9 @@ public class MyTool {
      * @return 和原数组每个元素的值都相同的一个新数组
      */
     public static int[] copyIntList(int[] foo) {
-        int[] bar = {};
-        for (int i = 0; i < foo.length; i++) {
+        int length = foo.length;
+        int[] bar = new int[length];
+        for (int i = 0; i < length; i++) {
             bar[i] = foo[i];
         }
         return bar;
