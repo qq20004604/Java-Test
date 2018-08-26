@@ -43,6 +43,15 @@ public class PrintIn {
     }
 
     /**
+     * 上次输入是否正确
+     *
+     * @return true 正确
+     */
+    public Boolean isInputError() {
+        return isError;
+    }
+
+    /**
      * 获取用户输入
      */
     private void setUserInput() {
@@ -77,14 +86,5 @@ public class PrintIn {
             // 打印这行错误信息
 //            e.printStackTrace();
         }
-    }
-
-    /**
-     * 上次输入是否正确
-     *
-     * @return true 正确
-     */
-    public Boolean isInputError() {
-        return isError;
     }
 }

@@ -1,8 +1,16 @@
 package tools;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -29,15 +37,39 @@ public class PrintInTest {
      */
     @Test
     public void testSetTips() throws Exception {
-        //TODO: Test goes here...
+        PrintIn mock = mock(PrintIn.class);
+        String tips = "tips";
+        // 调用方法赋值
+        mock.setTips(tips);
+        // 验证这个方法调用是否使用成功
+        verify(mock, times(1)).setTips(tips);
     }
 
     /**
      * Method: printIn()
      */
-    @Test
+    // Mock BufferedReader对象，配置其返回结果 spy.readLine() 的输出为 "abdefg"
+    // 这样的话，就相当于代码里 str = br.readLine(); 这一行的值 str = "abdefg"
+    @Test(timeout = 100)
+//    @Test
+//    @Ignore
     public void testPrintIn() throws Exception {
-        //TODO: Test goes here...
+        String str = "fewfewf";
+
+
+        PrintIn mock = mock(PrintIn.class);
+//        PrintIn mock = new PrintIn();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader spy = spy(reader);
+        doReturn(str).when(spy).readLine();
+
+        // 调用方法赋值
+        mock.printIn();
+        // 验证这个方法调用是否使用成功
+//        verify(mock).printIn();
+
+        // 测试 输入的值 是否相等
+        assertEquals(mock.getUserInput(), str);
     }
 
     /**

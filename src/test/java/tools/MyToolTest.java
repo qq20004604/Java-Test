@@ -111,6 +111,12 @@ public class MyToolTest {
 
         int t5 = MyTool.StringToInt("0123");
         assertEquals(t5, 123);
+
+        // 对于 static 和 final 方法， Mockito 无法对其 when(…).thenReturn(…) 操作。
+        // 当我们连续两次为同一个方法使用 stub 的时候，他只会只用最新的一次。
+        // https://blog.csdn.net/zhangxin09/article/details/42422643
+        // MyTool mock = mock(MyTool.class);
+        // when(mock.StringToInt("213")).thenReturn(213);
     }
 
     /**
