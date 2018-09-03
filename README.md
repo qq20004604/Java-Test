@@ -31,7 +31,7 @@ public void testSetTips() throws Exception {
 }
 ```
 
-###
+### mock 源代码里某些方法的返回值
 
 
 

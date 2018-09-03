@@ -76,15 +76,20 @@ public class PrintIn {
         try {
             System.out.print(Tips);
             String s = br.readLine();
-
-            // 这个是考虑到负号
-            // 遇见负号时，只有 buf 为空（即让负号处于第一位）的时候，才会添加进去
-            int result = MyTool.StringToIntOnlyNumber(s);
-            str = String.valueOf(result);
+            str = stringToIntOnlyNumber(s);
         } catch (Exception e) {
             isError = true;
             // 打印这行错误信息
 //            e.printStackTrace();
         }
+    }
+
+    /**
+     * 获取用户输入的子函数（将String转为Number）
+     */
+    private String stringToIntOnlyNumber(String s) throws Exception {
+        int result = MyTool.StringToIntOnlyNumber(s);
+        str = String.valueOf(result);
+        return str;
     }
 }
